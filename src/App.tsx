@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Input } from "./components/ui/input";
-import { Button } from "./components/ui/button";
 import { Card, CardContent } from "./components/ui/card";
-import { CircleXIcon } from "lucide-react";
+import { CircleX } from "lucide-react";
 
 interface Todo {
   id: string;
@@ -14,7 +13,10 @@ function App() {
   const [todoList, setTodoList] = useState<Todo[]>([]);
 
   const addTodo = () => {
-    setTodoList([...todoList, todo]);
+    if (todo.id) {
+      setTodoList([todo, ...todoList]);
+      setTodo({ id: "", name: "" });
+    }
   };
 
   const deleteTodo = (id: string) => {
@@ -24,25 +26,22 @@ function App() {
 
   return (
     <div className="mt-8">
-      <div className="flex justify-center">
-        <Input
-          className="w-1/4"
-          value={todo.name}
-          onChange={(e) => setTodo({ id: todoList.length.toString(), name: e.target.value })}
-        />
-        <Button className="ml-4" onClick={() => addTodo()}>
-          {" "}
-          +{" "}
-        </Button>
-      </div>
       <div className="grid grid-cols-3 gap-4">
         <div></div>
         <div>
+          <div className="flex justify-center">
+            <Input
+              placeholder="What would you like to do?"
+              value={todo.name}
+              onChange={(e) => setTodo({ id: Date.now().toString(), name: e.target.value })}
+              onKeyDown={(e) => (e.key === "Enter" ? addTodo() : undefined)}
+            />
+          </div>
           {todoList.map((item) => (
             <Card id={item.id} className="mt-8">
-              <CardContent className="pt-6 pl-12 w-full">
+              <CardContent className="pt-6 pl-8 w-full">
                 {item.name}
-                <CircleXIcon
+                <CircleX
                   className="h-4 w-4 mt-1 float-right text-slate-400 hover:text-slate"
                   onClick={() => deleteTodo(item.id)}
                 />
