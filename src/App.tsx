@@ -1,34 +1,51 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Input } from './components/ui/input';
+import { Button } from './components/ui/button';
+import { Card, CardContent } from './components/ui/card';
+import { CircleXIcon } from 'lucide-react';
+
+interface Todo {
+  id: string;
+  name: string;
+}
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [todo, setTodo] = useState<Todo>({id: '', name: ''});
+  const [todoList, setTodoList] = useState<Todo []>([])
+
+  const addTodo = () => {
+    setTodoList([...todoList, todo])
+  }
+
+  const deleteTodo = (id: string) => {
+    const filteredList = todoList.filter(todo => todo.id !== id)
+    setTodoList(filteredList)
+  }
 
   return (
-    <>
+    <div className="mt-8">
+      <div className="flex justify-center">
+        <Input className="w-1/4" value={todo.name} onChange={(e) => setTodo({id: todoList.length.toString(), name: e.target.value})} />
+        <Button className="ml-4" onClick={() => addTodo()}> + </Button>
+      </div>
+      <div className="grid grid-cols-3 gap-4">
+
+      <div></div>
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      {
+        todoList.map((item) => (
+          <Card id = {item.id} className="mt-8">
+            <CardContent className="pt-6 pl-12 w-full">
+              {item.name}
+              <CircleXIcon className="h-4 w-4 mt-1 float-right" onClick={() => deleteTodo(item.id)}/>
+            </CardContent>
+          </Card>
+        ))
+      }
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+      <div></div>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </div>
   )
 }
 
