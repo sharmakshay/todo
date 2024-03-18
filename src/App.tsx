@@ -31,6 +31,7 @@ function App() {
         <div>
           <div className="flex justify-center">
             <Input
+              autoFocus
               placeholder="What would you like to do?"
               value={todo.name}
               onChange={(e) => setTodo({ id: Date.now().toString(), name: e.target.value })}
