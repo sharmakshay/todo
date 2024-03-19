@@ -20,7 +20,6 @@ const TaskList = ({ taskType, tasks, setTasks, taskAction }: TaskListProps) => {
         return <Checkbox onClick={() => taskAction(taskId)} />;
       }
       case TaskType.Done: {
-        //statements;
         return (
           <ListRestart
             className="h-5 w-5 text-gray-500 hover:text-gray-400"
