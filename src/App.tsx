@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TaskList from "@/components/taskList";
 import { Task, TaskType } from "./interfaces/task";
+import { Badge } from "./components/ui/badge";
 
 const App = () => {
   const [task, setTask] = useState<Task>({ id: "", name: "", status: TaskType.Pending });
@@ -49,9 +50,9 @@ const App = () => {
           <Tabs defaultValue={TaskType.Pending} className="mt-8">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value={TaskType.Pending}>
-                Pending {pendingList.length ? `(${pendingList.length})` : ``}
+                Pending {pendingList.length ? <Badge className="ml-4">{pendingList.length}</Badge> : ``}
               </TabsTrigger>
-              <TabsTrigger value={TaskType.Done}>Done {doneList.length ? `(${doneList.length})` : ``}</TabsTrigger>
+              <TabsTrigger value={TaskType.Done}>Done</TabsTrigger>
             </TabsList>
             <TabsContent value={TaskType.Pending}>
               <TaskList
