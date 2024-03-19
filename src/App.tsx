@@ -48,8 +48,10 @@ const App = () => {
           </div>
           <Tabs defaultValue={TaskType.Pending} className="mt-8">
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value={TaskType.Pending}>Pending ({pendingList.length})</TabsTrigger>
-              <TabsTrigger value={TaskType.Done}>Done</TabsTrigger>
+              <TabsTrigger value={TaskType.Pending}>
+                Pending {pendingList.length ? `(${pendingList.length})` : ``}
+              </TabsTrigger>
+              <TabsTrigger value={TaskType.Done}>Done {doneList.length ? `(${doneList.length})` : ``}</TabsTrigger>
             </TabsList>
             <TabsContent value={TaskType.Pending}>
               <TaskList
