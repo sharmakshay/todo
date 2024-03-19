@@ -1,27 +1,24 @@
 import { useState } from "react";
-import { Input } from "./components/ui/input";
-
+import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
+import TaskList from "@/components/taskList";
 import { Task, TaskType } from "./interfaces/task";
 
-import TaskList from "./components/taskList";
-
 const App = () => {
-  const [task, setTask] = useState<Task>({ id: "", name: "", isDone: false });
+  const [task, setTask] = useState<Task>({ id: "", name: "", status: TaskType.Pending });
   const [pendingList, setPendingList] = useState<Task[]>([]);
   const [doneList, setDoneList] = useState<Task[]>([]);
 
   const addPendingTask = () => {
     if (task.id) {
       setPendingList([task, ...pendingList]);
-      setTask({ id: "", name: "", isDone: true });
+      setTask({ id: "", name: "", status: TaskType.Pending });
     }
   };
 
   const markDoneTask = (id: string) => {
     const completedTodo = pendingList.filter((todo) => todo.id === id)[0];
-    completedTodo.isDone = true;
+    completedTodo.status = TaskType.Done;
     setDoneList([completedTodo, ...doneList]);
 
     setPendingList([...pendingList.filter((todo) => todo.id !== completedTodo.id)]);
@@ -29,7 +26,7 @@ const App = () => {
 
   const resetDoneTask = (id: string) => {
     const doneTodo = doneList.filter((todo) => todo.id === id)[0];
-    doneTodo.isDone = true;
+    doneTodo.status = TaskType.Pending;
     setPendingList([doneTodo, ...pendingList]);
 
     setDoneList([...doneList.filter((todo) => todo.id !== doneTodo.id)]);
@@ -45,7 +42,7 @@ const App = () => {
               autoFocus
               placeholder="What would you like to do?"
               value={task.name}
-              onChange={(e) => setTask({ id: Date.now().toString(), name: e.target.value, isDone: false })}
+              onChange={(e) => setTask({ id: Date.now().toString(), name: e.target.value, status: TaskType.Pending })}
               onKeyDown={(e) => (e.key === "Enter" ? addPendingTask() : undefined)}
             />
           </div>

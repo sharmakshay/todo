@@ -21,7 +21,13 @@ const TaskList = ({ taskType, tasks, setTasks, taskAction }: TaskListProps) => {
       }
       case TaskType.Done: {
         //statements;
-        return <ListRestart className="h-5 w-5 text-gray-500" role="button" onClick={() => taskAction(taskId)} />;
+        return (
+          <ListRestart
+            className="h-5 w-5 text-gray-500 hover:text-gray-400"
+            role="button"
+            onClick={() => taskAction(taskId)}
+          />
+        );
       }
       default: {
         console.log("incorrect task type");
