@@ -1,25 +1,27 @@
 import { useState } from "react";
 import { Input } from "./components/ui/input";
 import { Card, CardContent } from "./components/ui/card";
-import { CircleX } from "lucide-react";
+import { AnimatePresence, Reorder } from "framer-motion";
+import { Checkbox } from "./components/ui/checkbox";
 
 interface Todo {
   id: string;
   name: string;
+  isDone: boolean;
 }
 
 function App() {
-  const [todo, setTodo] = useState<Todo>({ id: "", name: "" });
+  const [todo, setTodo] = useState<Todo>({ id: "", name: "", isDone: false });
   const [todoList, setTodoList] = useState<Todo[]>([]);
 
   const addTodo = () => {
     if (todo.id) {
       setTodoList([todo, ...todoList]);
-      setTodo({ id: "", name: "" });
+      setTodo({ id: "", name: "", isDone: true });
     }
   };
 
-  const deleteTodo = (id: string) => {
+  const completeTodo = async (id: string) => {
     const filteredList = todoList.filter((todo) => todo.id !== id);
     setTodoList(filteredList);
   };
@@ -34,21 +36,33 @@ function App() {
               autoFocus
               placeholder="What would you like to do?"
               value={todo.name}
-              onChange={(e) => setTodo({ id: Date.now().toString(), name: e.target.value })}
+              onChange={(e) => setTodo({ id: Date.now().toString(), name: e.target.value, isDone: false })}
               onKeyDown={(e) => (e.key === "Enter" ? addTodo() : undefined)}
             />
           </div>
-          {todoList.map((item) => (
-            <Card id={item.id} className="mt-8">
-              <CardContent className="pt-6 pl-8 w-full">
-                {item.name}
-                <CircleX
-                  className="h-4 w-4 mt-1 float-right text-slate-400 hover:text-slate"
-                  onClick={() => deleteTodo(item.id)}
-                />
-              </CardContent>
-            </Card>
-          ))}
+          <AnimatePresence>
+            <Reorder.Group values={todoList} onReorder={setTodoList} dragListener={false}>
+              {todoList.map((todo: Todo) => (
+                <Reorder.Item
+                  key={todo.id}
+                  value={todo.name}
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.15 }}
+                  exit={{ opacity: 0, scale: 0 }}
+                >
+                  <Card className="mt-8">
+                    <CardContent className="pt-6 pl-8 w-full">
+                      <div className="flex items-center">
+                        <Checkbox className="mr-6" onClick={() => completeTodo(todo.id)} />
+                        <span>{todo.name}</span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Reorder.Item>
+              ))}
+            </Reorder.Group>
+          </AnimatePresence>
         </div>
         <div></div>
       </div>
