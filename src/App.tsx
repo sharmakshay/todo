@@ -12,7 +12,7 @@ interface Todo {
   isDone: boolean;
 }
 
-function App() {
+const App = () => {
   const [todo, setTodo] = useState<Todo>({ id: "", name: "", isDone: false });
   const [pendingList, setPendingList] = useState<Todo[]>([]);
   const [doneList, setDoneList] = useState<Todo[]>([]);
@@ -24,7 +24,7 @@ function App() {
     }
   };
 
-  const completePendingTodo = async (id: string) => {
+  const completePendingTodo = (id: string) => {
     const completedTodo = pendingList.filter((todo) => todo.id === id)[0];
     completedTodo.isDone = true;
     setDoneList([completedTodo, ...doneList]);
@@ -32,7 +32,7 @@ function App() {
     setPendingList([...pendingList.filter((todo) => todo.id !== completedTodo.id)]);
   };
 
-  const recycleDoneTodo = async (id: string) => {
+  const recycleDoneTodo = (id: string) => {
     const doneTodo = doneList.filter((todo) => todo.id === id)[0];
     doneTodo.isDone = true;
     setPendingList([doneTodo, ...pendingList]);
@@ -101,6 +101,7 @@ function App() {
                           <div className="flex items-center">
                             <ListRestart
                               className="mr-6 h-5 w-5 text-gray-500"
+                              role="button"
                               onClick={() => recycleDoneTodo(todo.id)}
                             />
                             <span>{todo.name}</span>
@@ -118,6 +119,6 @@ function App() {
       </div>
     </div>
   );
-}
+};
 
 export default App;
