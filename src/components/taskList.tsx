@@ -37,11 +37,12 @@ const TaskList = ({ taskType, tasks, setTasks, taskAction }: TaskListProps) => {
 
   return (
     <AnimatePresence>
-      <Reorder.Group values={tasks} onReorder={setTasks} dragListener={false}>
+      <Reorder.Group axis="y" values={tasks} onReorder={setTasks}>
         {tasks.map((task: Task) => (
           <Reorder.Item
+            id={task.id}
             key={task.id}
-            value={task.name}
+            value={task}
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.15 }}

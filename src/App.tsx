@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TaskList from "@/components/taskList";
 import { Task, TaskType } from "./interfaces/task";
 import { Badge } from "./components/ui/badge";
+import { Smile } from "lucide-react";
 
 const App = () => {
   const [task, setTask] = useState<Task>({ id: "", name: "", status: TaskType.Pending });
@@ -41,31 +42,38 @@ const App = () => {
           <div className="flex justify-center">
             <Input
               autoFocus
-              placeholder="What would you like to do?"
+              placeholder="What would you like to achieve today?"
               value={task.name}
               onChange={(e) => setTask({ id: Date.now().toString(), name: e.target.value, status: TaskType.Pending })}
               onKeyDown={(e) => (e.key === "Enter" ? addPendingTask() : undefined)}
             />
           </div>
-          <Tabs defaultValue={TaskType.Pending} className="mt-8">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value={TaskType.Pending}>
-                Pending {pendingList.length ? <Badge className="ml-4">{pendingList.length}</Badge> : ``}
-              </TabsTrigger>
-              <TabsTrigger value={TaskType.Done}>Done</TabsTrigger>
-            </TabsList>
-            <TabsContent value={TaskType.Pending}>
-              <TaskList
-                taskType={TaskType.Pending}
-                tasks={pendingList}
-                setTasks={setPendingList}
-                taskAction={markDoneTask}
-              />
-            </TabsContent>
-            <TabsContent value={TaskType.Done}>
-              <TaskList taskType={TaskType.Done} tasks={doneList} setTasks={setDoneList} taskAction={resetDoneTask} />
-            </TabsContent>
-          </Tabs>
+          {pendingList.length === 0 && doneList.length === 0 ? (
+            <div className="h-full flex justify-center items-center text-gray-400 mt-24">
+              No pending tasks
+              <Smile className="h-5 w-5 ml-4" />
+            </div>
+          ) : (
+            <Tabs defaultValue={TaskType.Pending} className="mt-8">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value={TaskType.Pending}>
+                  Pending {pendingList.length ? <Badge className="ml-4">{pendingList.length}</Badge> : ``}
+                </TabsTrigger>
+                <TabsTrigger value={TaskType.Done}>Done</TabsTrigger>
+              </TabsList>
+              <TabsContent value={TaskType.Pending}>
+                <TaskList
+                  taskType={TaskType.Pending}
+                  tasks={pendingList}
+                  setTasks={setPendingList}
+                  taskAction={markDoneTask}
+                />
+              </TabsContent>
+              <TabsContent value={TaskType.Done}>
+                <TaskList taskType={TaskType.Done} tasks={doneList} setTasks={setDoneList} taskAction={resetDoneTask} />
+              </TabsContent>
+            </Tabs>
+          )}
         </div>
         <div></div>
       </div>
